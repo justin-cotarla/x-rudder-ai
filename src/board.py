@@ -1,5 +1,5 @@
-from Player import Player
-from Token import Token
+from src.player import Player
+from src.token import Token
 
 class Board:
 
@@ -13,7 +13,6 @@ class Board:
         self.grid = [[None]*columns for n in range(rows)]
 
     def get_winner(self):
-        print self.grid
         for row in range(self.rows - 2):
             for column in range(self.columns - 2):
                 token_topleft = self.grid[row][column]
