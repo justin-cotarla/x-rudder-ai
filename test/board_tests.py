@@ -24,8 +24,6 @@ class BoardTests(unittest.TestCase):
         self.board.grid[2][4] = self.token1
         self.board.grid[4][4] = self.token1
 
-        print self.board.grid
-
         self.assertEqual(self.board.get_winner(), self.player1)
 
     def test_winner_but_strikethrough(self):
@@ -37,6 +35,15 @@ class BoardTests(unittest.TestCase):
 
         self.board.grid[3][2] = self.token2
         self.board.grid[3][4] = self.token2
+
+        self.assertEqual(self.board.get_winner(), None)
+
+    def test_false_winner_pattern(self):
+        self.board.grid[2][2] = self.token1
+        self.board.grid[4][2] = self.token1
+        self.board.grid[3][3] = self.token1
+        self.board.grid[2][4] = self.token2
+        self.board.grid[4][4] = self.token1
 
         self.assertEqual(self.board.get_winner(), None)
 
