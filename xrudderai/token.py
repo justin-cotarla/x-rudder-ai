@@ -1,4 +1,4 @@
-from src.player import Player
+from xrudderai.player import Player
 
 class Token:
     player = Player('x')
