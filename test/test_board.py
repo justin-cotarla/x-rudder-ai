@@ -39,7 +39,6 @@ class TestBoard(TestCase):
     def test_move_token(self):
         self.board.place_token(self.mock_token1, 2, 4)
         self.board.move_token(self.mock_player1, 2, 4, 3, 5)
-        print(self.board)
         
         self.assertEqual(self.board.grid[5][3], self.mock_token1)
         self.assertEqual(self.board.grid[4][2], None)
@@ -74,6 +73,16 @@ class TestBoard(TestCase):
 
         self.board.grid[3][2] = self.mock_token2
         self.board.grid[3][4] = self.mock_token2
+
+        self.assertEqual(self.board.get_winner(), None)
+
+
+    def test_false_winner_pattern(self):
+        self.board.grid[2][2] = self.mock_token1
+        self.board.grid[4][2] = self.mock_token1
+        self.board.grid[3][3] = self.mock_token1
+        self.board.grid[2][4] = self.mock_token2
+        self.board.grid[4][4] = self.mock_token1
 
         self.assertEqual(self.board.get_winner(), None)
 
