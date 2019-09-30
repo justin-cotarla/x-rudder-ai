@@ -72,24 +72,24 @@ class Board:
     def get_winner(self):
         for row in range(self.rows - 2):
             for column in range(self.columns - 2):
-                token_topleft = self.grid[row][column]
-                token_topright = self.grid[row][column + 2]
+                token_top_left = self.grid[row][column]
+                token_top_right = self.grid[row][column + 2]
                 token_middle = self.grid[row + 1][column + 1]
-                token_bottomright = self.grid[row + 2][column]
-                token_bottomleft = self.grid[row + 2][column + 2]
+                token_bottom_right = self.grid[row + 2][column]
+                token_bottom_left = self.grid[row + 2][column + 2]
 
-                token_middleleft = self.grid[row + 1][column]
-                token_middleright = self.grid[row + 1][column + 2]
+                token_middle_left = self.grid[row + 1][column]
+                token_middle_right = self.grid[row + 1][column + 2]
 
-                x = [token_topleft, token_topright, token_middle, token_bottomright, token_bottomleft]
+                x = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
                 if any(token is None for token in x):
                     continue
 
-                possible_winning_player = token_topleft.player
-                if possible_winning_player == token_topright.player == token_middle.player == token_bottomright.player == token_bottomleft.player:
-                    if (token_middleleft is None) | (token_middleright is None):
+                possible_winning_player = token_top_left.player
+                if all(token.player == possible_winning_player for token in x):
+                    if (token_middle_left is None) or (token_middle_right is None):
                         return possible_winning_player
-                    if (token_middleleft.player == possible_winning_player) & (token_middleright.player == possible_winning_player):
+                    if (token_middle_left.player == possible_winning_player) or (token_middle_right.player == possible_winning_player):
                         return possible_winning_player
 
         return None
