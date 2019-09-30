@@ -71,8 +71,8 @@ class Board:
                 token_top_left = self.grid[row][column]
                 token_top_right = self.grid[row][column + 2]
                 token_middle = self.grid[row + 1][column + 1]
-                token_bottom_right = self.grid[row + 2][column]
-                token_bottom_left = self.grid[row + 2][column + 2]
+                token_bottom_right = self.grid[row + 2][column + 2]
+                token_bottom_left = self.grid[row + 2][column]
 
                 token_middle_left = self.grid[row + 1][column]
                 token_middle_right = self.grid[row + 1][column + 2]
