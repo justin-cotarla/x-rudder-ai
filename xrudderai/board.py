@@ -5,16 +5,12 @@ class Board:
 
     ASCII_A = 65
 
-    rows = 0
-    columns = 0
-    grid = []
-
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
         self.grid = [[None]*columns for n in range(rows)]
 
-    def __repr__(self):
+    def __str__(self):
         output = "\n    ┌"
 
         for idx in range(self.columns*2 - 1):
@@ -51,10 +47,10 @@ class Board:
 
     def place_token(self, token, x, y):
         if x < 0 or x >= self.columns or y < 0 or y >= self.rows:
-            raise IndexError("Position {}, {} is out of bounds".format(x, y))
+            raise IndexError()
 
         if self.grid[y][x] != None:
-            raise ValueError("Position {}, {} is already occupied".format(x, y))
+            raise ValueError()
 
         self.grid[y][x] = token
 
