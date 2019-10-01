@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 from abc import ABC, abstractmethod
 
 class Player(ABC):
@@ -19,3 +20,10 @@ class Player(ABC):
             return True
         else:
             return False
+=======
+class Player():
+    symbol = ''
+
+    def __init__(self, symbol):
+        self.symbol = symbol
+>>>>>>> 53df92aa30bcf20d9f125fbafd3cb2f2455d5c31
