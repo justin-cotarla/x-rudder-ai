@@ -7,8 +7,7 @@ class HumanPlayer(Player):
 
     def take_turn(self):
         
-        turn = ''
-        while turn == '':
+        while True:
             turn = input("Play your turn: ")
 
             place = re.search("[p] [a-mA-M](1[0]|[1-9])$", turn)
@@ -22,6 +21,7 @@ class HumanPlayer(Player):
                 y = coord[1:]
                 #return PlaceCommand(x, y)
                 print("x: "+x+", y: "+ y)
+                return turn
             elif (move):
                 print("You would like to move your token")
                 source = command[1]
@@ -32,10 +32,9 @@ class HumanPlayer(Player):
                 target_y = target[1:]
                 #return MoveCommand(source_x, source_y, target_x, targey_y)
                 print("source x: "+source_x+" and source y: "+source_y+"\ntarget x: "+target_x+" and target y: "+target_y)
+                return turn
             else:
                 print("Invalid move, please try again.")
-                turn = ''
-                command = ''
 
-player = HumanPlayer('x')
-player.take_turn()
+#player = HumanPlayer('x')
+#player.take_turn()
