@@ -13,5 +13,9 @@ class Player(ABC):
     @abstractmethod
     def take_turn(self):
         pass
-    
-    
+
+    def has_moves_left(self):
+        if (self.tokens_left > 0 or self.move_count < 30):
+            return True
+        else:
+            return False

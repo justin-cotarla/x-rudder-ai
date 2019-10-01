@@ -7,10 +7,10 @@ class Token:
         self.player = player
 
     def __str__(self):
-        print(self.player.symbol)
+        return self.player.symbol
 
 
-#human = HumanPlayer('x')
-#token = Token(human)
+# human = HumanPlayer('x')
+# token = Token(human)
 
-#token.__str__()
+# print(token.__str__())
