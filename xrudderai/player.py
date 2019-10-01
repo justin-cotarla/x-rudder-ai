@@ -2,8 +2,6 @@ from abc import ABC, abstractmethod
 
 class Player(ABC):
 
-    symbol = ''
-
     def __init__(self, symbol):
         self.symbol = symbol
         self.move_count = 0

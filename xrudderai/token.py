@@ -1,5 +1,3 @@
-from xrudderai.player import Player
-
 class Token:
 
     def __init__(self, player):
