@@ -1,4 +1,4 @@
-from HumanPlayer import HumanPlayer
+from humanplayer import HumanPlayer
 
 class Token:
     player = HumanPlayer('x')
