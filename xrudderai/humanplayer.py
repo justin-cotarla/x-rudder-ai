@@ -1,6 +1,6 @@
-from player import Player
-from placecommand import PlaceCommand
-from movecommand import MoveCommand
+from xrudderai.player import Player
+from xrudderai.placecommand import PlaceCommand
+from xrudderai.movecommand import MoveCommand
 import re
 
 class HumanPlayer(Player):
