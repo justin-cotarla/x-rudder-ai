@@ -1,7 +1,7 @@
 from unittest import TestCase, main, mock
-from xrudderai.humanplayer import HumanPlayer
-from xrudderai.placecommand import PlaceCommand
-from xrudderai.movecommand import MoveCommand
+from xrudderai.human_player import HumanPlayer
+from xrudderai.place_command import PlaceCommand
+from xrudderai.move_command import MoveCommand
 
 class TestHumanPlayer(TestCase):
 

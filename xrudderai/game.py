@@ -1,23 +1,49 @@
+from xrudderai.board import Board
+from xrudderai.human_player import HumanPlayer
+from xrudderai.place_command import PlaceCommand
+from xrudderai.token import Token
 
 class Game:
-    def __init__(self, mode: str) -> None:
+    def __init__(self, mode):
         if mode == 'manual':
-            self.players = [Player(), Player()]
-            self.board = Board()
+            self.players = [HumanPlayer('x'), HumanPlayer('o')]
+            self.board = Board(10, 12)
             # Index 0 for Player 1, index 1 for Player 2
             self.current_player = 0
 
-    def start(self) -> None:
+    def start(self):
         while self.__is_game_over() == False:
-            player_move = self.players[self.current_player].take_turn()
-            # If placing token
+            try:
+                player = self.players[self.current_player]
+                print(self.board)
+                print("\n****** Player {}'s turn ******".format(self.current_player + 1))
+                print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, 30 - player.move_count))
+
+                self.__play_turn(player)
+
+                if self.players[1 - self.current_player].has_moves_left:
+                    self.current_player = 1 - self.current_player
+            except Exception as e:
+                print("Error: {}".format(e))
+                
+    def __play_turn(self, player):
+        player_move = player.take_turn()
             
-            # If moving token
+        if isinstance(player_move, PlaceCommand):
+            token = Token(player)
+            self.board.place_token(token, player_move.target_x, player_move.target_y)
+            player.placed_token()
+        else:
+            self.board.move_token(
+                player,
+                player_move.source_x,
+                player_move.source_y,
+                player_move.target_x,
+                player_move.target_y,
+            )
+            player.moved_token()
 
-            print(self.board)
-            self.current_player = 1 - self.current_player
-
-    def __is_game_over(self) -> bool:
+    def __is_game_over(self):
         winner = self.board.get_winner()
         if winner:
             print(f"Player {self.players.index(winner) + 1} wins!")
@@ -26,12 +52,7 @@ class Game:
         # Check if it is a draw
         player1 = self.players[0]
         player2 = self.players[1]
-        if (
-            player1.tokens_left == 15 and
-            player2.tokens_left == 15 and
-            player1.move_count == 30 and
-            player2.move_count == 30
-        ):
+        if not player1.has_moves_left() and not player2.has_moves_left():
             print("The game has ended in a draw.")
             return True
 
@@ -61,7 +82,7 @@ if __name__ == '__main__':
     * Automatic (Coming Soon)
     ''')
 
-    mode = input().lower()
+    mode = input('Enter game mode: ').lower()
     
     if mode != 'manual':
         print('Sorry, this is not a valid mode. Please try again.')
