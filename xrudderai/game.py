@@ -3,6 +3,13 @@ from xrudderai.human_player import HumanPlayer
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
 
+# For fun
+PLAYER_TEXT_COLOUR = [
+    '\033[92m',
+    '\033[94m',
+    '\033[0m' # Represents end colour
+]
+
 class Game:
     def __init__(self, mode):
         if mode == 'manual':
@@ -16,7 +23,11 @@ class Game:
             try:
                 player = self.players[self.current_player]
                 print(self.board)
-                print("\n****** Player {}'s turn ******".format(self.current_player + 1))
+                print("{}****** Player {}'s turn ******{}".format(
+                    PLAYER_TEXT_COLOUR[self.current_player],
+                    self.current_player + 1,
+                    PLAYER_TEXT_COLOUR[2]
+                ))
                 print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, 30 - player.move_count))
 
                 self.__play_turn(player)
