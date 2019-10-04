@@ -4,29 +4,28 @@ from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
 
 # For fun
-PLAYER_TEXT_COLOUR = [
-    '\033[92m',
-    '\033[94m',
-    '\033[0m' # Represents end colour
-]
+TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
 
 class Game:
     def __init__(self, mode):
-        if mode == 'manual':
-            self.players = [HumanPlayer('x'), HumanPlayer('o')]
-            self.board = Board(10, 12)
-            # Index 0 for Player 1, index 1 for Player 2
-            self.current_player = 0
+        self.players = (
+            HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
+            HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+        )
+        self.board = Board(10, 12)
+        # Index 0 for Player 1, index 1 for Player 2
+        self.current_player = 0
 
     def start(self):
         while self.__is_game_over() == False:
             try:
                 player = self.players[self.current_player]
+
                 print(self.board)
                 print("{}****** Player {}'s turn ******{}".format(
-                    PLAYER_TEXT_COLOUR[self.current_player],
+                    TEXT_COLOUR[self.current_player],
                     self.current_player + 1,
-                    PLAYER_TEXT_COLOUR[2]
+                    TEXT_COLOUR[2]
                 ))
                 print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, 30 - player.move_count))
 
@@ -95,12 +94,13 @@ if __name__ == '__main__':
     * Automatic (Coming Soon)
     ''')
 
-    mode = input('Enter game mode: ').lower()
-    
-    if mode != 'manual':
-        print('Sorry, this is not a valid mode. Please try again.')
-        exit()
+    while True:
+        mode = input('Enter game mode: ').lower()
+        if mode == 'manual':
+            break
 
+        print('Sorry, this is not a valid mode. Please try again.\n')
+    
     game = Game(mode)
     game.start()
 
