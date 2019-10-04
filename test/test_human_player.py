@@ -19,7 +19,7 @@ class TestHumanPlayer(TestCase):
     def test_no_moves_left(self):
         self.humanplayer.move_count = 30
         self.humanplayer.tokens_left = 0
-        self.assertEqual(self.humanplayer.has_moves_left(), False)
+        self.assertEqual(self.humanplayer.has_actions_left(), False)
 
     def test_token_symbol(self):
         self.assertEqual(self.humanplayer.symbol, "x")

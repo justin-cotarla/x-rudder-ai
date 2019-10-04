@@ -31,10 +31,12 @@ class Game:
 
                 self.__play_turn(player)
 
-                if self.players[1 - self.current_player].has_moves_left:
-                    self.current_player = 1 - self.current_player
+                self.current_player = 1 - self.current_player
             except Exception as e:
                 print("Error: {}".format(e))
+
+        # Display final state of the board
+        print(self.board)
                 
     def __play_turn(self, player):
         player_move = player.take_turn()
@@ -56,13 +58,13 @@ class Game:
     def __is_game_over(self):
         winner = self.board.get_winner()
         if winner:
-            print(f"Player {self.players.index(winner) + 1} wins!")
+            print(f"\nPlayer {self.players.index(winner) + 1} wins!")
             return True
         
         # Check if it is a draw
         player1 = self.players[0]
         player2 = self.players[1]
-        if not player1.has_moves_left() and not player2.has_moves_left():
+        if not player1.has_actions_left() and not player2.has_actions_left():
             print("The game has ended in a draw.")
             return True
 
@@ -90,13 +92,13 @@ if __name__ == '__main__':
     To play a turn, use "p <x><y>" to place a token or "m <x1><y1> <x2><y2>" to move a token.
 
     Please select a mode to begin:
-    * Manual
-    * Automatic (Coming Soon)
+    * [1] Manual
+    * [2] Automatic (Coming Soon)
     ''')
 
     while True:
-        mode = input('Enter game mode: ').lower()
-        if mode == 'manual':
+        mode = input('Enter game mode (1 or 2): ').lower()
+        if mode == '1':
             break
 
         print('Sorry, this is not a valid mode. Please try again.\n')
