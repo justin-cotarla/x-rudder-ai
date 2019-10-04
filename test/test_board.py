@@ -38,9 +38,9 @@ class TestBoard(TestCase):
 
     def test_move_token(self):
         self.board.place_token(self.mock_token1, 2, 4)
-        self.board.move_token(self.mock_player1, 2, 4, 3, 5)
+        self.board.move_token(self.mock_player1, 2, 4, 2, 5)
         
-        self.assertEqual(self.board.grid[5][3], self.mock_token1)
+        self.assertEqual(self.board.grid[5][2], self.mock_token1)
         self.assertEqual(self.board.grid[4][2], None)
 
     def test_move_token_non_existant_token(self):
@@ -51,6 +51,13 @@ class TestBoard(TestCase):
         
         self.assertRaises(ValueError, self.board.move_token, self.mock_player2, 2, 4, 3, 5)
 
+    def test_move_outside_range(self):
+        self.board.place_token(self.mock_token1, 2, 4)
+        self.assertRaises(ValueError, self.board.move_token, self.mock_player1, 2, 4, 2, 6)
+
+    def test_null_move(self):
+        self.board.place_token(self.mock_token1, 2, 4)
+        self.assertRaises(ValueError, self.board.move_token, self.mock_player1, 2, 4, 2, 4)
 
     def test_no_winner(self):
         self.assertEqual(self.board.get_winner(), None)

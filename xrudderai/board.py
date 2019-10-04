@@ -62,6 +62,12 @@ class Board:
         if player != token.player:
             raise ValueError("Token does not belong to player")
 
+        if x1 - x2 == 0 and y1 - y2  == 0:
+          raise ValueError("Null move")
+
+        if abs(x1 - x2) > 1 or abs(y1 - y2) > 1:
+          raise ValueError("Token move out of range")
+
         self.place_token(token, x2, y2)
         self.grid[y1][x1] = None
 
