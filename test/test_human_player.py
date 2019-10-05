@@ -1,7 +1,7 @@
 from unittest import TestCase, main, mock
-from xrudderai.humanplayer import HumanPlayer
-from xrudderai.placecommand import PlaceCommand
-from xrudderai.movecommand import MoveCommand
+from xrudderai.human_player import HumanPlayer
+from xrudderai.place_command import PlaceCommand
+from xrudderai.move_command import MoveCommand
 
 class TestHumanPlayer(TestCase):
 
@@ -19,7 +19,7 @@ class TestHumanPlayer(TestCase):
     def test_no_moves_left(self):
         self.humanplayer.move_count = 30
         self.humanplayer.tokens_left = 0
-        self.assertEqual(self.humanplayer.has_moves_left(), False)
+        self.assertEqual(self.humanplayer.has_actions_left(), False)
 
     def test_token_symbol(self):
         self.assertEqual(self.humanplayer.symbol, "x")

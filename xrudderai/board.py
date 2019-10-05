@@ -47,10 +47,10 @@ class Board:
 
     def place_token(self, token, x, y):
         if x < 0 or x >= self.columns or y < 0 or y >= self.rows:
-            raise IndexError()
+            raise IndexError("Position is out of bounds.")
 
         if self.grid[y][x] != None:
-            raise ValueError()
+            raise ValueError("Position is already occupied.")
 
         self.grid[y][x] = token
 
