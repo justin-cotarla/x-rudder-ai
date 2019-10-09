@@ -1,5 +1,6 @@
 from xrudderai.board import Board
 from xrudderai.human_player import HumanPlayer
+from xrudderai.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
 
@@ -27,16 +28,14 @@ class Game:
                     self.current_player + 1,
                     TEXT_COLOUR[2]
                 ))
-                print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, 30 - player.move_count))
+                print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, Player.MOVE_COUNT))
 
                 self.__play_turn(player)
 
-                self.current_player = 1 - self.current_player
+                if self.players[1 - self.current_player].has_actions_left():
+                    self.current_player = 1 - self.current_player
             except Exception as e:
                 print("Error: {}".format(e))
-
-        # Display final state of the board
-        print(self.board)
                 
     def __play_turn(self, player):
         player_move = player.take_turn()
@@ -58,6 +57,8 @@ class Game:
     def __is_game_over(self):
         winner = self.board.get_winner()
         if winner:
+            # Display final state of the board
+            print(self.board)
             print(f"\nPlayer {self.players.index(winner) + 1} wins!")
             return True
         
@@ -65,7 +66,9 @@ class Game:
         player1 = self.players[0]
         player2 = self.players[1]
         if not player1.has_actions_left() and not player2.has_actions_left():
-            print("The game has ended in a draw.")
+            # Display final state of the board
+            print(self.board)
+            print("\nThe game has ended in a draw.")
             return True
 
         return False
@@ -105,4 +108,3 @@ if __name__ == '__main__':
     
     game = Game(mode)
     game.start()
-
