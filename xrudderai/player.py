@@ -19,11 +19,5 @@ class Player(ABC):
     def moved_token(self):
         Player.move_count -= 1
 
-    def can_place_token(self):
-        return self.tokens_left > 0
-
-    def can_move_token(self):
-        return Player.move_count > 0
-
     def has_actions_left(self):
-        return self.can_place_token() or self.can_move_token()
+        return self.tokens_left > 0 or Player.move_count > 0

@@ -15,7 +15,7 @@ class HumanPlayer(Player):
             command = turn.split()
 
             if place:
-                if self.can_place_token():
+                if self.tokens_left > 0:
                     coord = command[1]
                     x = coord[0]
                     y = coord[1:]
@@ -23,7 +23,7 @@ class HumanPlayer(Player):
                 
                 print('You are out of tokens.')
             elif move:
-                if self.can_move_token():
+                if Player.move_count > 0:
                     source = command[1]
                     target = command[2]
                     source_x = source[0]
