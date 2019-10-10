@@ -28,7 +28,7 @@ class Game:
                     self.current_player + 1,
                     TEXT_COLOUR[2]
                 ))
-                print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, Player.MOVE_COUNT))
+                print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, Player.move_count))
 
                 self.__play_turn(player)
 

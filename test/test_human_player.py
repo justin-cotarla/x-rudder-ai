@@ -8,7 +8,7 @@ class TestHumanPlayer(TestCase):
 
     def setUp(self):
         self.human_player = HumanPlayer("x")
-        Player.MOVE_COUNT = 30
+        Player.move_count = 30
 
     def test_take_turn_place(self):
         with mock.patch('builtins.input', return_value="p b8"):
@@ -19,12 +19,12 @@ class TestHumanPlayer(TestCase):
             assert isinstance(self.human_player.take_turn(), MoveCommand)
 
     def test_no_moves_left(self):
-        Player.MOVE_COUNT = 0
+        Player.move_count = 0
         self.human_player.tokens_left = 0
         self.assertFalse(self.human_player.has_actions_left())
 
     def test_uneven_actions_left(self):
-        Player.MOVE_COUNT = 0
+        Player.move_count = 0
         second_player = HumanPlayer("o")
         second_player.tokens_left = 0
 
