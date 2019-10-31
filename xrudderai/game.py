@@ -1,6 +1,7 @@
 from xrudderai.board import Board
-from xrudderai.human_player import HumanPlayer
-from xrudderai.player import Player
+from xrudderai.player.ai_player import AIPlayer
+from xrudderai.player.human_player import HumanPlayer
+from xrudderai.player.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
 
@@ -9,13 +10,20 @@ TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
 
 class Game:
     def __init__(self, mode):
-        self.players = (
-            HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
-            HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
-        )
         self.board = Board(10, 12)
         # Index 0 for Player 1, index 1 for Player 2
         self.current_player = 0
+
+        if mode == '1':
+            self.players = (
+                HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
+                HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+            )
+        else:
+            self.players = (
+                AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board),
+                HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+            )
 
     def start(self):
         while self.__is_game_over() == False:
@@ -96,12 +104,12 @@ if __name__ == '__main__':
 
     Please select a mode to begin:
     * [1] Manual
-    * [2] Automatic (Coming Soon)
+    * [2] Automatic
     ''')
 
     while True:
         mode = input('Enter game mode (1 or 2): ').lower()
-        if mode == '1':
+        if mode == '1' or mode == '2':
             break
 
         print('Sorry, this is not a valid mode. Please try again.\n')

@@ -1,4 +1,4 @@
-from xrudderai.player import Player
+from xrudderai.player.player import Player
 from xrudderai.token import Token
 
 

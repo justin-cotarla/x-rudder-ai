@@ -1,4 +1,4 @@
-from xrudderai.player import Player
+from xrudderai.player.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.move_command import MoveCommand
 import re
