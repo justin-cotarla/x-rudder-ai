@@ -11,11 +11,7 @@ class AIPlayer(Player):
     def take_turn(self):
         return PlaceCommand('a', '1')
 
-    # Use Depth-Limited Search with Cutoff = n
-    def __search_next_states(self, state, n):
-        pass
-
-    def __heuristic(self, square):
+    def __calculate_heuristic(self, board):
         return random.randint(0, 100)
 
 
