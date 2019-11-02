@@ -98,6 +98,10 @@ class Board:
 
 
     def calculate_heuristic(self, player, opponent):
+
+        #positive means player is winning
+        #negative means opponent is winning
+
         heuristic = 0
         for row in range(self.rows - 2):
             for column in range(self.columns - 2):
@@ -151,7 +155,6 @@ class Board:
                         opponentCount -= 1
                         negateOpponent+=1
 
-
                 if negatePlayer == 2:
                     playerCount = 0
                 else:
@@ -162,7 +165,7 @@ class Board:
                 if negateOpponent == 2:
                     opponentCount = 0
                 else:
-                    # all 5 tokens are players and there was no negation from opponent
+                    # all 5 tokens are opponent and there was no negation from player
                     if winningOpponent == 5:
                         return float('-inf')
 
