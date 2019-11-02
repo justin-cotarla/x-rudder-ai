@@ -23,6 +23,9 @@ class Game:
                 player = self.players[self.current_player]
 
                 print(self.board)
+                player1 = self.players[0]
+                player2 = self.players[1]
+                print(self.board.calculate_heuristic(player1, player2))
                 print("{}****** Player {}'s turn ******{}".format(
                     TEXT_COLOUR[self.current_player],
                     self.current_player + 1,
@@ -65,6 +68,7 @@ class Game:
         # Check if it is a draw
         player1 = self.players[0]
         player2 = self.players[1]
+
         if not player1.has_actions_left() and not player2.has_actions_left():
             # Display final state of the board
             print(self.board)

@@ -95,3 +95,81 @@ class Board:
                         return possible_winning_player
 
         return None
+
+
+    def calculate_heuristic(self, player, opponent):
+        heuristic = 0
+        for row in range(self.rows - 2):
+            for column in range(self.columns - 2):
+
+                playerCount = 0
+                opponentCount = 0
+
+                token_top_left = self.grid[row][column]
+                token_top_right = self.grid[row][column + 2]
+                token_middle = self.grid[row + 1][column + 1]
+                token_bottom_right = self.grid[row + 2][column + 2]
+                token_bottom_left = self.grid[row + 2][column]
+
+                token_middle_left = self.grid[row + 1][column]
+                token_middle_right = self.grid[row + 1][column + 2]
+
+                x = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
+
+                winningPlayer = 0
+                winningOpponent = 0
+
+                for token in x:
+                    if token is None:
+                        continue
+                    if token.player == opponent:
+                        winningOpponent+=1
+                        opponentCount+=1
+                    if token.player == player:
+                        winningPlayer+=1
+                        playerCount+=1
+
+                if(playerCount > 0 and opponentCount > 0):
+                    continue
+
+                negatePlayer = 0
+                negateOpponent = 0
+
+                if (token_middle_left is not None):
+                    if token_middle_left.player == opponent:
+                        playerCount -= 1
+                        negatePlayer+=1
+                    if token_middle_left.player == player:
+                        opponentCount -= 1
+                        negateOpponent+=1
+
+                if (token_middle_right is not None):
+                    if token_middle_right.player == opponent:
+                        playerCount -= 1
+                        negatePlayer+=1
+                    if token_middle_right.player == opponentCount:
+                        opponentCount -= 1
+                        negateOpponent+=1
+
+
+                if negatePlayer == 2:
+                    playerCount = 0
+                else:
+                    # all 5 tokens are players and there was no negation from opponent
+                    if winningPlayer == 5:
+                        return float('inf')
+
+                if negateOpponent == 2:
+                    opponentCount = 0
+                else:
+                    # all 5 tokens are players and there was no negation from opponent
+                    if winningOpponent == 5:
+                        return float('-inf')
+
+                if (playerCount):
+                    print(str(row) + "   Player: " + str(playerCount))
+                if (opponentCount):
+                    print("   Opponent: " + str(opponentCount))
+                heuristic += ( (10 ** playerCount) - (10 ** opponentCount))
+
+        return heuristic
