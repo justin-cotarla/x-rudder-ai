@@ -1,19 +1,19 @@
 from xrudderai.player import Player
 from xrudderai.token import Token
 
-class Board:
 
+class Board:
     ASCII_A = 65
 
     def __init__(self, rows, columns):
         self.rows = rows
         self.columns = columns
-        self.grid = [[None]*columns for n in range(rows)]
+        self.grid = [[None] * columns for n in range(rows)]
 
     def __str__(self):
         output = "\n    ┌"
 
-        for idx in range(self.columns*2 - 1):
+        for idx in range(self.columns * 2 - 1):
             output = output + ("───" if idx % 2 == 0 else "┬")
 
         output = output + "┐\n"
@@ -26,21 +26,21 @@ class Board:
             for token_idx, token in enumerate(row):
                 output = output + (" {} ".format(str(token)) if token else "   ")
                 output = output + "│"
-            
+
             output = output + "\n"
             if row_idx != 0:
                 output = output + "    ├"
-                for idx in range(self.columns*2 - 1):
+                for idx in range(self.columns * 2 - 1):
                     output = output + ("───" if idx % 2 == 0 else "┼")
                 output = output + "┤\n"
 
         output = output + "    └"
-        for idx in range(self.columns*2 - 1):
+        for idx in range(self.columns * 2 - 1):
             output = output + ("───" if idx % 2 == 0 else "┴")
 
         output = output + "┘\n    "
 
-        for letter in list(map(chr, range(self.ASCII_A, self.ASCII_A+self.columns))):
+        for letter in list(map(chr, range(self.ASCII_A, self.ASCII_A + self.columns))):
             output = output + "  {} ".format(letter)
 
         return output
@@ -62,11 +62,11 @@ class Board:
         if player != token.player:
             raise ValueError("Token does not belong to player")
 
-        if x1 - x2 == 0 and y1 - y2  == 0:
-          raise ValueError("Null move")
+        if x1 - x2 == 0 and y1 - y2 == 0:
+            raise ValueError("Null move")
 
         if abs(x1 - x2) > 1 or abs(y1 - y2) > 1:
-          raise ValueError("Token move out of range")
+            raise ValueError("Token move out of range")
 
         self.place_token(token, x2, y2)
         self.grid[y1][x1] = None
@@ -91,23 +91,22 @@ class Board:
                 if all(token.player == possible_winning_player for token in x):
                     if (token_middle_left is None) or (token_middle_right is None):
                         return possible_winning_player
-                    if (token_middle_left.player == possible_winning_player) or (token_middle_right.player == possible_winning_player):
+                    if (token_middle_left.player == possible_winning_player) or (
+                            token_middle_right.player == possible_winning_player):
                         return possible_winning_player
 
         return None
 
-
     def calculate_heuristic(self, player, opponent):
 
-        #positive means player is winning
-        #negative means opponent is winning
+        # positive means player is winning
+        # negative means opponent is winning
 
         heuristic = 0
         for row in range(self.rows - 2):
             for column in range(self.columns - 2):
 
-                playerCount = 0
-                opponentCount = 0
+                # calculate heuristic for local 3x3
 
                 token_top_left = self.grid[row][column]
                 token_top_right = self.grid[row][column + 2]
@@ -119,60 +118,59 @@ class Board:
                 token_middle_right = self.grid[row + 1][column + 2]
 
                 x = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
+                y = [token_middle_left, token_middle_right]
 
-                winningPlayer = 0
-                winningOpponent = 0
+                # keeps a count of tokens from each player in 3x3 that lead to a win, not taking account of negation
+                player_count = 0
+                opponent_count = 0
 
+                # for each token in cells in the 3x3 that lead to a win
                 for token in x:
                     if token is None:
                         continue
                     if token.player == opponent:
-                        winningOpponent+=1
-                        opponentCount+=1
+                        opponent_count += 1
                     if token.player == player:
-                        winningPlayer+=1
-                        playerCount+=1
+                        player_count += 1
 
-                if(playerCount > 0 and opponentCount > 0):
-                    continue
+                # both player and opponent have tokens in cells that could lead to a win, so is negated for both
+                if player_count > 0 and opponent_count > 0:
+                    continue  # skip this 3x3
 
-                negatePlayer = 0
-                negateOpponent = 0
+                # keeps a count of tokens from each player that lead to negation
+                negate_player = 0
+                negate_opponent = 0
 
-                if (token_middle_left is not None):
-                    if token_middle_left.player == opponent:
-                        playerCount -= 1
-                        negatePlayer+=1
-                    if token_middle_left.player == player:
-                        opponentCount -= 1
-                        negateOpponent+=1
+                # for each token in cells that could negate the other player
+                for token in y:
+                    if token is not None:
+                        if token_middle_left.player == opponent:
+                            negate_player += 1
+                        if token_middle_left.player == player:
+                            negate_opponent += 1
 
-                if (token_middle_right is not None):
-                    if token_middle_right.player == opponent:
-                        playerCount -= 1
-                        negatePlayer+=1
-                    if token_middle_right.player == opponentCount:
-                        opponentCount -= 1
-                        negateOpponent+=1
+                # all 5 tokens are players and there was no negation from opponent
+                if player_count == 5 and negate_player != 2:
+                    return float('inf')
+                # all 5 tokens are opponent and there was no negation from player
+                if opponent_count == 5 and negate_opponent != 2:
+                    return float('-inf')
 
-                if negatePlayer == 2:
-                    playerCount = 0
-                else:
-                    # all 5 tokens are players and there was no negation from opponent
-                    if winningPlayer == 5:
-                        return float('inf')
+                if negate_player == 2:
+                    player_count = 0
+                if negate_opponent == 2:
+                    opponent_count = 0
 
-                if negateOpponent == 2:
-                    opponentCount = 0
-                else:
-                    # all 5 tokens are opponent and there was no negation from player
-                    if winningOpponent == 5:
-                        return float('-inf')
+                if player_count:
+                    print("Player: " + str(player_count))
+                if opponent_count:
+                    print("Opponent: " + str(opponent_count))
+                if negate_opponent:
+                    print("NEGATE opponent: " + str(negate_opponent))
+                if negate_player:
+                    print("NEGATE player: " + str(negate_player))
 
-                if (playerCount):
-                    print(str(row) + "   Player: " + str(playerCount))
-                if (opponentCount):
-                    print("   Opponent: " + str(opponentCount))
-                heuristic += ( (10 ** playerCount) - (10 ** opponentCount))
+                # include negation - IRINA
+                heuristic += ((10 ** player_count) - (10 ** opponent_count))
 
         return heuristic
