@@ -143,11 +143,12 @@ class Board:
 
                 # for each token in cells that could negate the other player
                 for token in y:
-                    if token is not None:
-                        if token_middle_left.player == opponent:
-                            negate_player += 1
-                        if token_middle_left.player == player:
-                            negate_opponent += 1
+                    if token is None:
+                        continue
+                    if token.player == opponent:
+                        negate_player += 1
+                    if token.player == player:
+                        negate_opponent += 1
 
                 # all 5 tokens are players and there was no negation from opponent
                 if player_count == 5 and negate_player != 2:
@@ -171,6 +172,6 @@ class Board:
                     print("NEGATE player: " + str(negate_player))
 
                 # include negation - IRINA
-                heuristic += ((10 ** player_count) - (10 ** opponent_count))
+                heuristic += ((10 ** player_count) + (10 ** (negate_opponent+3)) - (10 ** opponent_count) - (10 ** (negate_player+3)))
 
         return heuristic
