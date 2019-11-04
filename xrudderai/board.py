@@ -158,8 +158,10 @@ class Board:
                     return float('-inf')
 
                 if negate_player == 2:
+                    negate_player = 0
                     player_count = 0
                 if negate_opponent == 2:
+                    negate_opponent = 0
                     opponent_count = 0
 
                 if player_count:
