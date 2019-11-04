@@ -174,6 +174,6 @@ class Board:
                     print("NEGATE player: " + str(negate_player))
 
                 # include negation - IRINA
-                heuristic += ((10 ** player_count) + (10 ** (negate_opponent+3)) - (10 ** opponent_count) - (10 ** (negate_player+3)))
+                heuristic += ((10 ** player_count) + (10 ** negate_opponent) - (10 ** (2*opponent_count)) - (10 ** (2*negate_player)))
 
         return heuristic
