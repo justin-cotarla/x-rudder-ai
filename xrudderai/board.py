@@ -170,15 +170,6 @@ class Board:
                 if horizontal_player_count != 2:
                     opponent_heuristic = (10 ** (winning_opponent_count + horizontal_opponent_count))
 
-                if winning_player_count:
-                    print("Player: " + str(winning_player_count))
-                if winning_opponent_count:
-                    print("Opponent: " + str(winning_opponent_count))
-                if horizontal_player_count:
-                    print("NEGATE opponent: " + str(horizontal_player_count))
-                if horizontal_opponent_count:
-                    print("NEGATE player: " + str(horizontal_opponent_count))
-
                 # include negation - IRINA
                 heuristic += player_heuristic - opponent_heuristic
 

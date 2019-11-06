@@ -24,11 +24,6 @@ class Game:
 
                 print(self.board)
 
-                #remove after
-                player1 = self.players[0]
-                player2 = self.players[1]
-                print(self.board.calculate_heuristic(player1, player2))
-
                 print("{}****** Player {}'s turn ******{}".format(
                     TEXT_COLOUR[self.current_player],
                     self.current_player + 1,
