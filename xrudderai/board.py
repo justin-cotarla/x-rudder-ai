@@ -117,63 +117,69 @@ class Board:
                 token_middle_left = self.grid[row + 1][column]
                 token_middle_right = self.grid[row + 1][column + 2]
 
-                x = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
-                y = [token_middle_left, token_middle_right]
+                winning_positions = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
+                horizontal_positions = [token_middle_left, token_middle_right]
 
-                # keeps a count of tokens from each player in 3x3 that lead to a win, not taking account of negation
-                player_count = 0
-                opponent_count = 0
+                # Step 1 - keep a count of tokens from each player in 3x3 in winning positions
 
-                # for each token in cells in the 3x3 that lead to a win
-                for token in x:
+                winning_player_count = 0
+                winning_opponent_count = 0
+                for token in winning_positions:
                     if token is None:
                         continue
                     if token.player == opponent:
-                        opponent_count += 1
+                        winning_opponent_count += 1
                     if token.player == player:
-                        player_count += 1
+                        winning_player_count += 1
 
-                # both player and opponent have tokens in cells that could lead to a win, so is negated for both
-                if player_count > 0 and opponent_count > 0:
-                    continue  # skip this 3x3
+                # Step 2 - if both player and opponent have tokens in winning positions, skip this 3x3
 
-                # keeps a count of tokens from each player that lead to negation
-                negate_player = 0
-                negate_opponent = 0
+                if winning_player_count > 0 and winning_opponent_count > 0:
+                    continue
 
-                # for each token in cells that could negate the other player
-                for token in y:
+                # Step 3 - keep a count of tokens from each player in horizontal positions
+
+                horizontal_opponent_count = 0
+                horizontal_player_count = 0
+                for token in horizontal_positions:
                     if token is None:
                         continue
                     if token.player == opponent:
-                        negate_player += 1
+                        horizontal_opponent_count += 1
                     if token.player == player:
-                        negate_opponent += 1
+                        horizontal_player_count += 1
 
-                # all 5 tokens are players and there was no negation from opponent
-                if player_count == 5 and negate_player != 2:
+                # Step 4 - return if this is a winning 3x3
+
+                # Player win
+                if winning_player_count == 5 and horizontal_opponent_count != 2:
                     return float('inf')
-                # all 5 tokens are opponent and there was no negation from player
-                if opponent_count == 5 and negate_opponent != 2:
+
+                # Opponent win
+                if winning_opponent_count == 5 and horizontal_player_count != 2:
                     return float('-inf')
 
-                if negate_player == 2:
-                    negate_player = 0
-                    player_count = 0
-                if negate_opponent == 2:
-                    negate_opponent = 0
-                    opponent_count = 0
+                # Step 5
 
-                if player_count:
-                    print("Player: " + str(player_count))
-                if opponent_count:
-                    print("Opponent: " + str(opponent_count))
-                if negate_opponent:
-                    print("NEGATE opponent: " + str(negate_opponent))
-                if negate_player:
-                    print("NEGATE player: " + str(negate_player))
+                player_heuristic = 0
+                opponent_heuristic = 0
+
+                if horizontal_opponent_count != 2:
+                    player_heuristic = (10 ** (winning_player_count + horizontal_player_count))
+
+                if horizontal_player_count != 2:
+                    opponent_heuristic = (10 ** (winning_opponent_count + horizontal_opponent_count))
+
+                if winning_player_count:
+                    print("Player: " + str(winning_player_count))
+                if winning_opponent_count:
+                    print("Opponent: " + str(winning_opponent_count))
+                if horizontal_player_count:
+                    print("NEGATE opponent: " + str(horizontal_player_count))
+                if horizontal_opponent_count:
+                    print("NEGATE player: " + str(horizontal_opponent_count))
 
                 # include negation - IRINA
-                heuristic += ((10 ** player_count) + (10 ** (2*negate_opponent)) - (10 ** opponent_count) - (10 ** (2*negate_player)))
+                heuristic += player_heuristic - opponent_heuristic
 
         return heuristic
