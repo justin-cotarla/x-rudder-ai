@@ -5,6 +5,7 @@ from xrudderai.move_command import MoveCommand
 from xrudderai.token import Token
 import random
 import sys
+import time
 
 class AIPlayer(Player):
     def __init__(self, symbol, board, opponent):
@@ -13,11 +14,11 @@ class AIPlayer(Player):
         super().__init__(symbol)
 
     def take_turn(self):
+        start = time.time()
         depth = 2
         best_move = None
         best_score = 0
         possible_moves = self._determine_possible_moves(self.board.grid)
-        print(len(possible_moves))
 
         for move in possible_moves:
             score = 0
@@ -39,6 +40,7 @@ class AIPlayer(Player):
                 best_score = score
             
 
+        print("Time to make move: {}".format(time.time() - start))
         return best_move
 
     def __minimax(self, grid, depth, maximizing):
@@ -93,18 +95,18 @@ class AIPlayer(Player):
             for move in possible_moves:
                 if isinstance(move, PlaceCommand):
                     self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
-                    heuristic = self.__minimax(self.board.grid, depth - 1, False)
+                    heuristic = self.__alpha_beta_prune(self.board.grid, depth - 1, False, a, b)
                     self.board.grid[move.target_y][move.target_x] = None
                 else:
                     self.board.grid[move.source_y][move.source_x] = None
                     self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
-                    heuristic = self.__minimax(self.board.grid, depth - 1, False)
+                    heuristic = self.__alpha_beta_prune(self.board.grid, depth - 1, False, a, b)
                     self.board.grid[move.target_y][move.target_x] = None
                     self.board.grid[move.source_y][move.source_x] = Token(self.opponent)
 
                 score = max(heuristic, score)
                 a = max(heuristic, a)
-                if b < a:
+                if b <= a:
                     break
         else:
             heuristic = 0
@@ -113,18 +115,18 @@ class AIPlayer(Player):
             for move in possible_moves:
                 if isinstance(move, PlaceCommand):
                     self.board.grid[move.target_y][move.target_x] = Token(self)
-                    heuristic = self.__minimax(self.board.grid, depth - 1, True)
+                    heuristic = self.__alpha_beta_prune(self.board.grid, depth - 1, True, a, b)
                     self.board.grid[move.target_y][move.target_x] = None
                 else:
                     self.board.grid[move.source_y][move.source_x] = None
                     self.board.grid[move.target_y][move.target_x] = Token(self)
-                    heuristic = self.__minimax(self.board.grid, depth - 1, True)
+                    heuristic = self.__alpha_beta_prune(self.board.grid, depth - 1, True, a, b)
                     self.board.grid[move.target_y][move.target_x] = None
                     self.board.grid[move.source_y][move.source_x] = Token(self)
 
                 score = min(heuristic, score)
                 b = min(heuristic, b)
-                if b < a:
+                if b <= a:
                     break
 
         return score
