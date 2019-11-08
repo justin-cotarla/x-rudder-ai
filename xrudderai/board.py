@@ -170,7 +170,6 @@ class Board:
                 if horizontal_player_count != 2:
                     opponent_heuristic = (10 ** winning_opponent_count) + (10 ** horizontal_opponent_count)
 
-                # include negation - IRINA
                 heuristic += player_heuristic - opponent_heuristic
 
         return heuristic
