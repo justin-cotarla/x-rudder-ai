@@ -13,23 +13,24 @@ class AIPlayer(Player):
         super().__init__(symbol)
 
     def take_turn(self):
-        depth = 3
+        depth = 2
         best_move = None
         best_score = 0
         possible_moves = self._determine_possible_moves(self.board.grid)
+        print(len(possible_moves))
 
         for move in possible_moves:
             score = 0
             if isinstance(move, PlaceCommand):
                 self.board.grid[move.target_y][move.target_x] = Token(self)
-                score = self.__minimax(self.board.grid, depth, True)
-                # score = self.__alpha_beta_prune(self.board.grid, depth, True, -sys.maxsize, sys.maxsize)
+                score = self.__minimax(self.board.grid, depth - 1, False)
+                # score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
                 self.board.grid[move.target_y][move.target_x] = None
             else:
                 self.board.grid[move.source_y][move.source_x] = None
                 self.board.grid[move.target_y][move.target_x] = Token(self)
-                score = self.__minimax(self.board.grid, depth, True)
-                # score = self.__alpha_beta_prune(self.board.grid, depth, True, -sys.maxsize, sys.maxsize)
+                score = self.__minimax(self.board.grid, depth - 1, False)
+                # score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
                 self.board.grid[move.target_y][move.target_x] = None
                 self.board.grid[move.source_y][move.source_x] = Token(self)
 
@@ -50,15 +51,15 @@ class AIPlayer(Player):
             possible_moves = self.opponent._determine_possible_moves(grid)
             for move in possible_moves:
                 if isinstance(move, PlaceCommand):
-                    self.board.grid[move.target_y][move.target_x] = Token(self)
+                    self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
                     heuristic = self.__minimax(self.board.grid, depth - 1, False)
                     self.board.grid[move.target_y][move.target_x] = None
                 else:
                     self.board.grid[move.source_y][move.source_x] = None
-                    self.board.grid[move.target_y][move.target_x] = Token(self)
+                    self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
                     heuristic = self.__minimax(self.board.grid, depth - 1, False)
                     self.board.grid[move.target_y][move.target_x] = None
-                    self.board.grid[move.source_y][move.source_x] = Token(self)
+                    self.board.grid[move.source_y][move.source_x] = Token(self.opponent)
 
                 score = max(heuristic, score)
         else:
@@ -91,15 +92,15 @@ class AIPlayer(Player):
             possible_moves = self.opponent._determine_possible_moves(grid)
             for move in possible_moves:
                 if isinstance(move, PlaceCommand):
-                    self.board.grid[move.target_y][move.target_x] = Token(self)
+                    self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
                     heuristic = self.__minimax(self.board.grid, depth - 1, False)
                     self.board.grid[move.target_y][move.target_x] = None
                 else:
                     self.board.grid[move.source_y][move.source_x] = None
-                    self.board.grid[move.target_y][move.target_x] = Token(self)
+                    self.board.grid[move.target_y][move.target_x] = Token(self.opponent)
                     heuristic = self.__minimax(self.board.grid, depth - 1, False)
                     self.board.grid[move.target_y][move.target_x] = None
-                    self.board.grid[move.source_y][move.source_x] = Token(self)
+                    self.board.grid[move.source_y][move.source_x] = Token(self.opponent)
 
                 score = max(heuristic, score)
                 a = max(heuristic, a)
@@ -128,20 +129,5 @@ class AIPlayer(Player):
 
         return score
 
-    def __calculate_heuristic(self, board):
+    def __calculate_heuristic(self, grid):
         return random.randint(0, 100)
-
-    def __move_and_execute(self, move, fn):
-        score = 0
-        if isinstance(move, PlaceCommand):
-            self.board.grid[move.target_y][move.target_x] = Token(self)
-            score = fn
-            self.board.grid[move.target_y][move.target_x] = None
-        else:
-            self.board.grid[move.source_y][move.source_x] = None
-            self.board.grid[move.target_y][move.target_x] = Token(self)
-            score = fn
-            self.board.grid[move.target_y][move.target_x] = None
-            self.board.grid[move.source_y][move.source_x] = Token(self)
-
-        return score
