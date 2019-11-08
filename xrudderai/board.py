@@ -165,10 +165,10 @@ class Board:
                 opponent_heuristic = 0
 
                 if horizontal_opponent_count != 2:
-                    player_heuristic = (10 ** (winning_player_count + horizontal_player_count))
+                    player_heuristic = (10 ** winning_player_count) + (10 ** horizontal_player_count)
 
                 if horizontal_player_count != 2:
-                    opponent_heuristic = (10 ** (winning_opponent_count + horizontal_opponent_count))
+                    opponent_heuristic = (10 ** winning_opponent_count) + (10 ** horizontal_opponent_count)
 
                 # include negation - IRINA
                 heuristic += player_heuristic - opponent_heuristic
