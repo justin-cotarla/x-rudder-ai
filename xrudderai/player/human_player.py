@@ -1,4 +1,5 @@
 from xrudderai.player.player import Player
+from xrudderai.command import Command
 from xrudderai.place_command import PlaceCommand
 from xrudderai.move_command import MoveCommand
 import re
@@ -19,7 +20,7 @@ class HumanPlayer(Player):
                     coord = command[1]
                     x = coord[0]
                     y = coord[1:]
-                    return PlaceCommand(x, y)
+                    return PlaceCommand(Command.LETTER_MAPPING[x], int(y) - 1)
                 
                 print('You are out of tokens.')
             elif move:
@@ -30,7 +31,12 @@ class HumanPlayer(Player):
                     source_y = source[1:]
                     target_x = target[0]
                     target_y = target[1:]
-                    return MoveCommand(source_x, source_y, target_x, target_y)
+                    return MoveCommand(
+                        Command.LETTER_MAPPING[source_x], 
+                        int(source_y) - 1, 
+                        Command.LETTER_MAPPING[target_x], 
+                        int(target_y) - 1,
+                    )
 
                 print('You are out of moves.')
             else:

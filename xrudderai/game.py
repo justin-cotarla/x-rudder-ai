@@ -20,9 +20,10 @@ class Game:
                 HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
             )
         else:
+            opponent = HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
             self.players = (
-                AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board),
-                HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+                AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board, opponent),
+                opponent
             )
 
     def start(self):
