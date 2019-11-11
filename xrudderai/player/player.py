@@ -39,7 +39,6 @@ class Player(ABC):
                 # Placing tokens
                 if grid[y][x] == None and self.tokens_left > 0:
                     moves.append(PlaceCommand(x, y))
-                    continue
 
                 # Moving tokens in all possible configurations
                 if grid[y][x] != None and grid[y][x].player == self and Player.move_count > 0:
