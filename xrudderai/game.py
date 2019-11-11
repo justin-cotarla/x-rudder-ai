@@ -4,13 +4,14 @@ from xrudderai.player.human_player import HumanPlayer
 from xrudderai.player.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
+from xrudderai.config import GAME_COLUMNS, GAME_ROWS
 
 # For fun
 TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
 
 class Game:
     def __init__(self, mode):
-        self.board = Board(10, 12)
+        self.board = Board(GAME_ROWS, GAME_COLUMNS)
         # Index 0 for Player 1, index 1 for Player 2
         self.current_player = 0
 
@@ -45,7 +46,7 @@ class Game:
                     self.current_player = 1 - self.current_player
             except Exception as e:
                 print("Error: {}".format(e))
-                
+       
     def __play_turn(self, player):
         player_move = player.take_turn()
             

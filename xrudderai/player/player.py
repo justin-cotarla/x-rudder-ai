@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from xrudderai.move_command import MoveCommand
 from xrudderai.place_command import PlaceCommand
+from xrudderai.config import GAME_COLUMNS, GAME_ROWS
 
 class Player(ABC):
 
@@ -24,29 +25,26 @@ class Player(ABC):
     def has_actions_left(self):
         return self.tokens_left > 0 or Player.move_count > 0
 
+    def _is_in_bounds(self, x, y):
+        return (x >= 0 and
+            x <= GAME_COLUMNS - 1 and
+            y >= 0 and
+            y <= GAME_ROWS - 1)
+
     def _determine_possible_moves(self, grid):
         moves = []
 
-        for i in range(len(grid)):
-            for j in range(len(grid[i])):
+        for x in range(GAME_COLUMNS):
+            for y in range(GAME_ROWS):
                 # Placing tokens
-                if grid[i][j] == None and self.tokens_left > 0:
-                    moves.append(PlaceCommand(j, i))
+                if grid[y][x] == None and self.tokens_left > 0:
+                    moves.append(PlaceCommand(x, y))
                     continue
 
-                # Moving tokens
-                if grid[i][j] != None and grid[i][j].player == self and Player.move_count > 0:
-                    # Move up
-                    if i > 0 and grid[i-1][j] == None:
-                        moves.append(MoveCommand(j, i, j, i-1))
-
-                    if i < len(grid) - 1 and grid[i+1][j] == None:
-                        moves.append(MoveCommand(j, i, j, i+1))
-
-                    if j > 0 and grid[i][j-1] == None:
-                        moves.append(MoveCommand(j, i, j-1, i))
-                        
-                    if j < len(grid[i]) - 1 and grid[i][j+1] == None:
-                        moves.append(MoveCommand(j, i, j+1, i))
-                        
+                # Moving tokens in all possible configurations
+                if grid[y][x] != None and grid[y][x].player == self and Player.move_count > 0:
+                    for sx in range(x-1, x+3):
+                        for sy in range(y-1, y+3):
+                            if self._is_in_bounds(sx, sy) and grid[sy][sx] == None:
+                                moves.append(MoveCommand(x, y, sx, sy))
         return moves
