@@ -1,3 +1,4 @@
+import random
 from xrudderai.board import Board
 from xrudderai.player.ai_player import AIPlayer
 from xrudderai.player.human_player import HumanPlayer
@@ -8,9 +9,11 @@ from xrudderai.config import GAME_COLUMNS, GAME_ROWS
 
 # For fun
 TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
+MANUAL = '1'
+AUTOMATIC = '2'
 
 class Game:
-    def __init__(self, mode):
+    def __init__(self, mode, human_start):
         self.board = Board(GAME_ROWS, GAME_COLUMNS)
         # Index 0 for Player 1, index 1 for Player 2
         self.current_player = 0
@@ -26,6 +29,9 @@ class Game:
                 AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board, opponent),
                 opponent
             )
+
+            if human_start:
+                self.players = tuple(reversed(self.players))
 
     def start(self):
         while self.__is_game_over() == False:
@@ -110,11 +116,33 @@ if __name__ == '__main__':
     ''')
 
     while True:
-        mode = input('Enter game mode (1 or 2): ').lower()
-        if mode == '1' or mode == '2':
+        mode = input('Enter game mode (1 or 2): ')
+        if mode == MANUAL or mode == AUTOMATIC:
             break
 
         print('Sorry, this is not a valid mode. Please try again.\n')
-    
-    game = Game(mode)
+
+    human_start = True
+    if mode == AUTOMATIC:
+        while True:
+            selection = input('''
+    Enter starting player:
+    * [1] Human
+    * [2] AI
+    * [3] Random
+    ''')
+
+            if selection == '1':
+                human_start = True
+                break
+            elif selection == '2':
+                human_start = False
+                break
+            elif selection == '3':
+                human_start = random.choice([True, False])
+                break
+            else:
+                print('Sorry, this is not a valid selection. Please try again.\n')
+
+    game = Game(mode, human_start)
     game.start()
