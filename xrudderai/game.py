@@ -1,21 +1,31 @@
 from xrudderai.board import Board
-from xrudderai.human_player import HumanPlayer
-from xrudderai.player import Player
+from xrudderai.player.ai_player import AIPlayer
+from xrudderai.player.human_player import HumanPlayer
+from xrudderai.player.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
+from xrudderai.config import GAME_COLUMNS, GAME_ROWS
 
 # For fun
 TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
 
 class Game:
     def __init__(self, mode):
-        self.players = (
-            HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
-            HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
-        )
-        self.board = Board(10, 12)
+        self.board = Board(GAME_ROWS, GAME_COLUMNS)
         # Index 0 for Player 1, index 1 for Player 2
         self.current_player = 0
+
+        if mode == '1':
+            self.players = (
+                HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
+                HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+            )
+        else:
+            opponent = HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+            self.players = (
+                AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board, opponent),
+                opponent
+            )
 
     def start(self):
         while self.__is_game_over() == False:
@@ -36,7 +46,7 @@ class Game:
                     self.current_player = 1 - self.current_player
             except Exception as e:
                 print("Error: {}".format(e))
-                
+       
     def __play_turn(self, player):
         player_move = player.take_turn()
             
@@ -96,12 +106,12 @@ if __name__ == '__main__':
 
     Please select a mode to begin:
     * [1] Manual
-    * [2] Automatic (Coming Soon)
+    * [2] Automatic
     ''')
 
     while True:
         mode = input('Enter game mode (1 or 2): ').lower()
-        if mode == '1':
+        if mode == '1' or mode == '2':
             break
 
         print('Sorry, this is not a valid mode. Please try again.\n')
