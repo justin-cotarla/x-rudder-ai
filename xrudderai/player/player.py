@@ -42,8 +42,8 @@ class Player(ABC):
 
                 # Moving tokens in all possible configurations
                 if grid[y][x] != None and grid[y][x].player == self and Player.move_count > 0:
-                    for sx in range(x-1, x+3):
-                        for sy in range(y-1, y+3):
+                    for sx in range(x-1, x+1):
+                        for sy in range(y-1, y+1):
                             if self._is_in_bounds(sx, sy) and grid[sy][sx] == None:
                                 moves.append(MoveCommand(x, y, sx, sy))
         return moves
