@@ -151,7 +151,7 @@ class AIPlayer(Player):
                 winning_positions = [token_top_left, token_top_right, token_middle, token_bottom_right, token_bottom_left]
                 horizontal_positions = [token_middle_left, token_middle_right]
 
-                # Step 1 - keep a count of tokens from each player in 3x3 in winning positions
+                # Step 1 - keep a count of tokens from each player in 3x3 in winning positions - if both player and opponent have tokens in winning positions, skip this 3x3
 
                 winning_player_count = 0
                 winning_opponent_count = 0
@@ -163,13 +163,11 @@ class AIPlayer(Player):
                         winning_opponent_count += 1
                     if token.player == self:
                         winning_player_count += 1
+                    if winning_player_count > 0 and winning_opponent_count > 0:
+                        continue
 
-                # Step 2 - if both player and opponent have tokens in winning positions, skip this 3x3
 
-                if winning_player_count > 0 and winning_opponent_count > 0:
-                    continue
-
-                # Step 3 - keep a count of tokens from each player in horizontal positions
+                # Step 2 - keep a count of tokens from each player in horizontal positions
 
                 horizontal_opponent_count = 0
                 horizontal_player_count = 0
@@ -182,7 +180,7 @@ class AIPlayer(Player):
                     if token.player == self:
                         horizontal_player_count += 1
 
-                # Step 4 - return if this is a winning 3x3
+                # Step 3 - return if this is a winning 3x3
 
                 # Player win
                 if winning_player_count == 5 and horizontal_opponent_count != 2:
@@ -192,7 +190,7 @@ class AIPlayer(Player):
                 if winning_opponent_count == 5 and horizontal_player_count != 2:
                     return float('-inf')
 
-                # Step 5
+                # Step 4
 
                 player_heuristic = 0
                 opponent_heuristic = 0
