@@ -25,14 +25,14 @@ class AIPlayer(Player):
             score = 0
             if isinstance(move, PlaceCommand):
                 self.board.grid[move.target_y][move.target_x] = Token(self)
-                score = self.__minimax(self.board.grid, depth - 1, False)
-                # score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
+                # score = self.__minimax(self.board.grid, depth - 1, False)
+                score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
                 self.board.grid[move.target_y][move.target_x] = None
             else:
                 self.board.grid[move.source_y][move.source_x] = None
                 self.board.grid[move.target_y][move.target_x] = Token(self)
-                score = self.__minimax(self.board.grid, depth - 1, False)
-                # score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
+                # score = self.__minimax(self.board.grid, depth - 1, False)
+                score = self.__alpha_beta_prune(self.board.grid, depth - 1, False, -sys.maxsize, sys.maxsize)
                 self.board.grid[move.target_y][move.target_x] = None
                 self.board.grid[move.source_y][move.source_x] = Token(self)
 
@@ -41,7 +41,7 @@ class AIPlayer(Player):
                 best_score = score
             
         print("Time to make move: {}".format(time.time() - start))
-        return best_move
+        return best_move if best_move else possible_moves[0]
 
     def __minimax(self, grid, depth, maximizing):
         if depth == 0:

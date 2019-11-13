@@ -51,6 +51,7 @@ class Game:
                     self.current_player = 1 - self.current_player
             except Exception as e:
                 print("Error: {}".format(e))
+                exit()
        
     def __play_turn(self, player):
         player_move = player.take_turn()
