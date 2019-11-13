@@ -5,10 +5,9 @@ from xrudderai.player.human_player import HumanPlayer
 from xrudderai.player.player import Player
 from xrudderai.place_command import PlaceCommand
 from xrudderai.token import Token
-from xrudderai.config import GAME_COLUMNS, GAME_ROWS
+from xrudderai.config import GAME_COLUMNS, GAME_ROWS, PLAYER_1_COLOUR, PLAYER_2_COLOUR, DEFAULT_COLOUR
 
 # For fun
-TEXT_COLOUR = ('\033[92m', '\033[94m', '\033[0m')
 MANUAL = '1'
 AUTOMATIC = '2'
 
@@ -20,13 +19,13 @@ class Game:
 
         if mode == '1':
             self.players = (
-                HumanPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2])),
-                HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+                HumanPlayer("o", PLAYER_1_COLOUR),
+                HumanPlayer("o", PLAYER_2_COLOUR)
             )
         else:
-            opponent = HumanPlayer("{}o{}".format(TEXT_COLOUR[1], TEXT_COLOUR[2]))
+            opponent = HumanPlayer("o", PLAYER_1_COLOUR)
             self.players = (
-                AIPlayer("{}o{}".format(TEXT_COLOUR[0], TEXT_COLOUR[2]), self.board, opponent),
+                AIPlayer("o", PLAYER_2_COLOUR, self.board, opponent),
                 opponent
             )
 
@@ -40,9 +39,9 @@ class Game:
 
                 print(self.board)
                 print("{}****** Player {}'s turn ******{}".format(
-                    TEXT_COLOUR[self.current_player],
+                    player.colour,
                     self.current_player + 1,
-                    TEXT_COLOUR[2]
+                    DEFAULT_COLOUR
                 ))
                 print("Tokens left: {}\nMoves left: {}\n".format(player.tokens_left, Player.move_count))
 
