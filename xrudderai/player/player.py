@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 from xrudderai.move_command import MoveCommand
 from xrudderai.place_command import PlaceCommand
-from xrudderai.config import GAME_COLUMNS, GAME_ROWS
+from xrudderai.config import GAME_COLUMNS, GAME_ROWS, DEFAULT_COLOUR
 
 class Player(ABC):
 
     move_count = 30
 
-    def __init__(self, symbol):
-        self.symbol = symbol
+    def __init__(self, symbol, colour):
+        self.colour = colour
+        self.symbol = "{}{}{}".format(colour, symbol, DEFAULT_COLOUR)
         self.tokens_left = 15
         super().__init__()
 

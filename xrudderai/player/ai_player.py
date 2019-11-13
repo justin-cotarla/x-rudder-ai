@@ -8,10 +8,10 @@ import sys
 import time
 
 class AIPlayer(Player):
-    def __init__(self, symbol, board, opponent):
+    def __init__(self, symbol, colour, board, opponent):
         self.board = board
         self.opponent = opponent
-        super().__init__(symbol)
+        super().__init__(symbol, colour)
 
     def take_turn(self):
         start = time.time()
