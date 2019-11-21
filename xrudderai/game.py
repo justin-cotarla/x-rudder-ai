@@ -55,6 +55,8 @@ class Game:
        
     def __play_turn(self, player):
         player_move = player.take_turn()
+        
+        print("Player {} played: {}".format(self.current_player + 1, player_move))
             
         if isinstance(player_move, PlaceCommand):
             token = Token(player)
